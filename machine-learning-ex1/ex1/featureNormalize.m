@@ -24,15 +24,19 @@ sigma = zeros(1, size(X, 2));
 %               each feature. 
 %
 % Hint: You might find the 'mean' and 'std' functions useful.
-%       
+      
+mu = mean(X);
+sigma = std(X);
 
+% sanity check
+%areamean= mean(mu(1));
+%bedroommean = mean(mu(1));
+% m = length(X_area_norm_Matrix); % no of examples
 
-
-
-
-
-
-
+n = size(X,2); % No of features, not examples
+for i = 1:n
+    X_norm(:,i) = (X(:,i) - mu(i)) / sigma(i);
+end
 
 % ============================================================
 

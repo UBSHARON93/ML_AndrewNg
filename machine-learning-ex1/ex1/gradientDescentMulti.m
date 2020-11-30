@@ -16,17 +16,15 @@ for iter = 1:num_iters
     % Hint: While debugging, it can be useful to print out the values
     %       of the cost function (computeCostMulti) and gradient here.
     %
+    
+    HypoPredvals = X * theta; % Predicted Hypothetical Theta values
+    n = size(X,2); % No cols of X, which is no of features, not examples
+    theta_tmp = zeros(n,1);
+    for i=1:n
+      theta_tmp(i) = theta(i) - alpha / m * sum((HypoPredvals - y) .* X(:,i)); 
+    end
 
-
-
-
-
-
-
-
-
-
-
+    theta = theta_tmp;
     % ============================================================
 
     % Save the cost J in every iteration    
