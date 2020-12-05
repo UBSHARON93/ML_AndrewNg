@@ -36,7 +36,7 @@ grad = zeros(size(theta));
 %           grad = grad + YOUR_CODE_HERE (using the temp variable)
 %
 
-Theta=theta
+Theta=theta;
 Theta(1) = 0;
 % Hypothesis fcn in logistic reg
 h = sigmoid(X * theta); 

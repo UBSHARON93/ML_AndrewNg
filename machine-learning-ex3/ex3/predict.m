@@ -21,14 +21,16 @@ p = zeros(size(X, 1), 1);
 %       can use max(A, [], 2) to obtain the max for each row.
 %
 
+% Add bias unit, extra column
+X = [ones(m, 1) X];         % 5000x400 [+1]bias 
+a1=X;                       % Activation nodes of layer 1
+z2=(Theta1*a1')';           % 25x401 X (5000x401)' = 25x5000' = 5000x25 
+a2=[ones(m,1) sigmoid(z2)]; % +1 extra bias unit, activation nodes of Layer 2, subjected to Sigmoid activation
+z3=a2*Theta2';              % 5000x26
+a3=sigmoid(z3);             % Sigmoid activation
 
-
-
-
-
-
-
-
+[max_val, index]= max(a3,[],2);
+p=index;
 % =========================================================================
 
 
