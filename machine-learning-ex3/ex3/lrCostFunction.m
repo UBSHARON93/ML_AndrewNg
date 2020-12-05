@@ -36,14 +36,16 @@ grad = zeros(size(theta));
 %           grad = grad + YOUR_CODE_HERE (using the temp variable)
 %
 
-
-
-
-
-
-
-
-
+Theta=theta
+Theta(1) = 0;
+% Hypothesis fcn in logistic reg
+h = sigmoid(X * theta); 
+% Regularization params for cost and gradient
+R_param_cost = (lambda/(2*m)) * (Theta' * Theta); %t'*t=t^2 
+R_param_grad = (lambda/(m)) * Theta; % no theta square 
+% cost and gradient
+J = ( (-1/m)*(y'*log(h)+(1-y)'*log(1-h)) ) + R_param_cost; 
+grad = (X'*(h-y))/m + R_param_grad;
 
 % =============================================================
 
