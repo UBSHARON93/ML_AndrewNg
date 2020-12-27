@@ -62,23 +62,84 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% Add bias terms
+X = [ones(m,1) X];
+% foward propagation
+  % a1 = X; 
+  % z2 = theta1 * X'
+a2 = sigmoid(Theta1 * X'); % a2 = sigmoid(z2) 
+
+% add bias
+a2 = [ones(m,1) a2'];
+h_theta = sigmoid(Theta2 * a2'); % h_theta equals z3, z3 = Theta2 * a2'
+
+% y(k) - Recode the labels as vectors containing only 0 or 1 (p5 of ex4.pdf)
+% First set all values zero, resssign the subsequent row as 1, for multiclass classification
+yk = zeros(num_labels, m); 
+for i=1:m,
+  yk(y(i),i)=1;
+end
+
+% Formula for cost fcn
+J = (1/m) * sum ( sum (  (-yk) .* log(h_theta)  -  (1-yk) .* log(1-h_theta) ));
+
+% Dont regularize the terms that correspond to the bias. 
+% For the matrices Theta1 and Theta2, this corresponds to the first col of each matrix.
+t1 = Theta1(:,2:size(Theta1,2));
+t2 = Theta2(:,2:size(Theta2,2));
+
+% regularization formula
+Reg = lambda  * (sum( sum ( t1.^ 2 )) + sum( sum ( t2.^ 2 ))) / (2*m);
+
+% cost function + reg
+J = J + Reg;
 
 
+% -------------------------------------------------------------
+
+% Backprop
+
+for t=1:m,
+
+	% dummie pass-by-pass
+	% forward propag
+
+	a1 = X(t,:); % X already have bias
+	z2 = Theta1 * a1';
+
+	a2 = sigmoid(z2);
+	a2 = [1 ; a2]; % add bias
+
+	z3 = Theta2 * a2;
+
+	a3 = sigmoid(z3); % final activation layer a3 == h(theta)
 
 
+	% back propag 
+
+	z2=[1; z2]; % bias
+
+	delta_3 = a3 - yk(:,t); % y(k) trick - getting columns of t element
+	delta_2 = (Theta2' * delta_3) .* sigmoidGradient(z2);
+
+	% skipping sigma2(0) 
+	delta_2 = delta_2(2:end); 
+
+	Theta2_grad = Theta2_grad + delta_3 * a2';
+	Theta1_grad = Theta1_grad + delta_2 * a1; % I don't know why a1 doesn't need to be transpost (brute force try)
+
+end;
 
 
+% Regularization 
 
+	Theta1_grad(:, 1) = Theta1_grad(:, 1) ./ m;
 
+	Theta1_grad(:, 2:end) = Theta1_grad(:, 2:end) ./ m + ((lambda/m) * Theta1(:, 2:end));
 
+	Theta2_grad(:, 1) = Theta2_grad(:, 1) ./ m;
 
-
-
-
-
-
-
-
+	Theta2_grad(:, 2:end) = Theta2_grad(:, 2:end) ./ m + ((lambda/m) * Theta2(:, 2:end));
 
 % -------------------------------------------------------------
 
