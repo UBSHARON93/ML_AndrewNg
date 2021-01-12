@@ -19,17 +19,25 @@ grad = zeros(size(theta));
 %               You should set J to the cost and grad to the gradient.
 %
 
+% calculate the hypothesis
+h = X*theta;
+% Hypothesis error
+h_error = h - y;
+% sum of squared error
+sumSquaredError = sum(h_error .^ 2);
+% Now first term in Cost fcn 
+Reg_LinR_FirstTerm = (1/(2 * m)) * sumSquaredError;
+% calculate second term
+theta_without_Bias = theta(2:end);
+sum_SquaredTheta = sum(theta_without_Bias .^ 2);
+Reg_LinR_SecondTerm = (lambda / (2 * m)) * sum_SquaredTheta;
 
+% Cost function eqtn
+J = Reg_LinR_FirstTerm + Reg_LinR_SecondTerm;
 
-
-
-
-
-
-
-
-
-
+% Calculate gradients
+grad = (1/m) * X' * h_error;
+grad(2:end) += (lambda / m) * theta_without_Bias;
 % =========================================================================
 
 grad = grad(:);
